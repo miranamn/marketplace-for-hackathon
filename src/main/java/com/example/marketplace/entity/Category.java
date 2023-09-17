@@ -20,7 +20,7 @@ public class Category {
     @Column(name = "category_id", unique = true)
     private UUID categoryId;
     @OneToMany
-    @Column(name = "position_id", unique = true)
+    @Column(name = "position_id")
     private List<Position> positions;
     @NotBlank(message="{Name is invalid}")
     @Column(name = "category_name")
