@@ -26,7 +26,7 @@ public class Position {
     private String positionName;
     @NotBlank(message="{description is invalid}")
     @Column(name = "position_desc")
-    private Text positionDesc;
+    private String positionDesc;
     @NotBlank(message="{Photo is invalid}")
     @Column(name = "position_photo")
     private String positionPhoto;
