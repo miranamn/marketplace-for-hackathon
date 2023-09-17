@@ -18,7 +18,6 @@ public class Seller {
     @Column(name = "seller_id", unique = true)
     private UUID sellerId;
     @NotBlank(message="{password is invalid}")
-    @Size(min = 4, max = 15, message="{size is invalid}")
     @Column(name = "seller_password")
     private String sellerPassword;
     @NotBlank(message="{First name is invalid}")
@@ -33,7 +32,7 @@ public class Seller {
     @Column(name = "seller_patro_name")
     private String sellerPatroName;
     @NotBlank(message="{Number is invalid}")
-    @Column(name = "seller_number")
+    @Column(name = "seller_number", unique = true)
     private String sellerNumber;
     @NotBlank(message="{UCard is invalid}")
     @Column(name = "seller_u_card", unique = true)
