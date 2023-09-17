@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "api/sellers")
+@RequestMapping(path = "api/seller")
 public class SellerController {
     @Autowired
     private SellerService sellerService;
