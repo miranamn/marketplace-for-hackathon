@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -33,9 +34,11 @@ public class User {
     private String userLastName;
     @Column(name = "user_sex")
     private boolean userSex;
-    @NotBlank(message="{birthday is invalid}")
+    @NotNull(message="{birthday is invalid}")
     @Column(name = "user_bday")
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Past
     private LocalDate userBDay;
     @Column(name = "user_u_card", unique = true)
     private String userUCard;

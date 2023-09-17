@@ -2,6 +2,7 @@ package com.example.marketplace.service;
 
 import com.example.marketplace.entity.User;
 import com.example.marketplace.exceptions.UsernameNotFoundException;
+import com.example.marketplace.exceptions.ValidUserException;
 import com.example.marketplace.repository.UserRepository;
 import com.example.marketplace.utilsSecurity.Crypt;
 import jakarta.transaction.Transactional;
@@ -12,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Date;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -26,11 +24,19 @@ public class UserService {
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
+    public Optional<User> getUserById(UUID id){
+        return userRepository.findById(id);
+    }
     @Transactional
-    public ResponseEntity<String> addUsers(User user){
-        user.setUserPassword(Crypt.hash(user.getUserPassword()));
-        userRepository.save(user);
-        return ResponseEntity.ok("registration was success");
+    public UUID addUsers(User user){
+        if (userRepository.findByUserPhone(user.getUserPhone()).isPresent() ||
+                userRepository.findByUserEmail(user.getUserEmail()).isPresent())
+            throw new ValidUserException("SUCH DATA IS TAKEN");
+        else {
+            user.setUserPassword(Crypt.hash(user.getUserPassword()));
+            userRepository.save(user);
+        }
+        return userRepository.findByUserEmail(user.getUserEmail()).get().getUserId();
     }
     @Transactional
     public String loginUser(Map<String, String> user){
@@ -47,9 +53,22 @@ public class UserService {
                 .claim("kid", "id")
                 .claim("email", email)
                 .claim("phone", person.get().getUserPhone())
-                .claim("birthday", person.get().getUserBDay())
                 .setExpiration(new Date(System.currentTimeMillis() + 300000))
                 .compact();
         return token;
+    }
+
+    @Transactional
+    public ResponseEntity<String> updateUser(UUID id, User user){
+        User userTemp = this.userRepository.findById(id).orElseThrow(() -> new ValidUserException(
+                "user with id " + id + " does not exists"));
+        userTemp.setUserPassword(Crypt.hash(user.getUserPassword()));
+        userTemp.setUserFirstName(user.getUserFirstName());
+        userTemp.setUserLastName(user.getUserLastName());
+        userTemp.setUserSex(user.isUserSex());
+        userTemp.setUserUCard(user.getUserUCard());
+        userTemp.setUserAddress(user.getUserAddress());
+        userTemp.setUserPhoto(user.getUserPhoto());
+        return ResponseEntity.ok("update was success");
     }
 }
