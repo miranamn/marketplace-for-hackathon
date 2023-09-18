@@ -21,7 +21,7 @@ public class Store {
     @Column(name = "store_id", unique = true)
     private UUID storeId;
     @ManyToOne
-    @Column(name = "seller_id")
+    @JoinColumn(name = "seller_id")
     private Seller seller;
     @OneToMany
     @Column(name = "category_id")
