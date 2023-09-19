@@ -25,6 +25,10 @@ public class UserController {
     public Optional<User> getUserById(@PathVariable("id") UUID id){
         return userService.getUserById(id);
     }
+    @GetMapping("/{token}")
+    public UUID getUserByToken(@PathVariable String token){
+        return userService.getUserByToken(token);
+    }
     @PostMapping("/registration")
     public UUID addUsers(@RequestBody @Valid User user){
         return userService.addUsers(user);

@@ -27,6 +27,11 @@ public class UserService {
     public Optional<User> getUserById(UUID id){
         return userRepository.findById(id);
     }
+    public UUID getUserByToken(String token){
+        String mail = (String) Jwts.parser().parse(token).getHeader().get("email");
+       // String mail = (String) Jwts.claims().get("email");
+        return userRepository.findByUserEmail(mail).get().getUserId();
+    }
     @Transactional
     public UUID addUsers(User user){
         if (userRepository.findByUserPhone(user.getUserPhone()).isPresent() ||
