@@ -29,8 +29,8 @@ public class SellerController {
         return sellerService.addSellers(seller);
     }
     @PostMapping("/login")
-    public Map<String, String> loginSeller(@RequestBody @Valid Map<String, String> seller){
-        return Map.of("token", sellerService.loginSeller(seller));
+    public Map<String, Object> loginSeller(@RequestBody @Valid Map<String, String> seller){
+        return sellerService.loginSeller(seller);
     }
     @PutMapping("/{id}")
     public ResponseEntity<String> updateSeller(@PathVariable("id") UUID id, @RequestBody @Valid Seller seller){

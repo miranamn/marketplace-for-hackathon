@@ -38,7 +38,7 @@ public class SellerService {
     }
 
     @Transactional
-    public String loginSeller(Map<String, String> seller){
+    public Map<String, Object> loginSeller(Map<String, String> seller){
         String mail = seller.get("sellerEmail");
         Optional<Seller> person = sellerRepository.findBySellerEmail(mail);
         String password = person.get().getSellerPassword();
@@ -54,7 +54,19 @@ public class SellerService {
                 .claim("phone", person.get().getSellerPhone())
                 .setExpiration(new Date(System.currentTimeMillis() + 300000))
                 .compact();
-        return token;
+        Map<String, Object> map = Map.of("token", token);
+        Map<String, Object> newMap = new HashMap<>(map);
+        newMap.put("sellerId", person.get().getSellerId());
+        newMap.put("sellerPassword", seller.get("SellerPassword"));
+        newMap.put("sellerFirstName", person.get().getSellerFirstName());
+        newMap.put("sellerLastName", person.get().getSellerLastName());
+        newMap.put("sellerPatroName", person.get().getSellerPatroName());
+        newMap.put("sellerNumber", person.get().getSellerNumber());
+        newMap.put("sellerUCard", person.get().getSellerUCard());
+        newMap.put("sellerEmail", person.get().getSellerEmail());
+        newMap.put("sellerPhone", person.get().getSellerPhone());
+        newMap.put("sellerPhoto", person.get().getSellerPhoto());
+        return newMap;
     }
 
     @Transactional
