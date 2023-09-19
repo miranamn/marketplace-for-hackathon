@@ -21,6 +21,9 @@ public class Position {
     @GeneratedValue
     @Column(name = "position_id", unique = true)
     private UUID positionId;
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
     @NotBlank(message="{Name is invalid}")
     @Column(name = "position_name")
     private String positionName;

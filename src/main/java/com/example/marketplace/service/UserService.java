@@ -44,7 +44,7 @@ public class UserService {
         return userRepository.findByUserEmail(user.getUserEmail()).get().getUserId();
     }
     @Transactional
-    public String loginUser(Map<String, String> user){
+    public Map<String, Object> loginUser(Map<String, String> user){
         String mail = user.get("userEmail");
         Optional<User> person = userRepository.findByUserEmail(mail);
         String password = person.get().getUserPassword();
@@ -60,7 +60,19 @@ public class UserService {
                 .claim("phone", person.get().getUserPhone())
                 .setExpiration(new Date(System.currentTimeMillis() + 300000))
                 .compact();
-        return token;
+        Map<String, Object> map = Map.of("token", token);
+        Map<String, Object> newMap = new HashMap<>(map);
+        newMap.put("userId", person.get().getUserId());
+        newMap.put("userPassword", user.get("userPassword"));
+        newMap.put("userFirstName", person.get().getUserFirstName());
+        newMap.put("userLastName", person.get().getUserLastName());
+        newMap.put("userBDay", person.get().getUserBDay());
+        newMap.put("userUCard", person.get().getUserUCard());
+        newMap.put("userEmail", person.get().getUserEmail());
+        newMap.put("userPhone", person.get().getUserPhone());
+        newMap.put("userAddress", person.get().getUserAddress());
+        newMap.put("userPhoto", person.get().getUserPhoto());
+        return newMap;
     }
 
     @Transactional

@@ -34,8 +34,8 @@ public class UserController {
         return userService.addUsers(user);
     }
     @PostMapping("/login")
-    public Map<String, String> loginUser(@RequestBody @Valid Map<String, String> user){
-        return Map.of("token", userService.loginUser(user));
+    public Map<String, Object> loginUser(@RequestBody @Valid Map<String, String> user){
+        return userService.loginUser(user);
     }
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable("id") UUID id, @RequestBody @Valid User user){
